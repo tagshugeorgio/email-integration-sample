@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    volumes:
+      - ./database:/var/lib/mysql
+      - ./logs:/var/log/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      - MYSQL_DATABASE=sample_email
+      - MYSQL_USER=uwaas
+      - MYSQL_PASSWORD=1qazxsw2
+      - MYSQL_ROOT_PASSWORD=1qazxsw2
+      - TZ=Asia/Tokyo
+    ports:
+      - 3306:3306
+
+  smtp:
+    image: djfarrelly/maildev
+    ports:
+      - "1025:25"
+      - "1080:80"
+    command: bin/maildev -w 80 -s 25 --incoming-user hello --incoming-pass hello
